@@ -7,13 +7,12 @@ const uglify = require('gulp-uglify');
 const autoprefixer = require('gulp-autoprefixer');
 const cssnano = require('gulp-cssnano');
 const del = require('del');
-const webpack = require('webpack-stream');
 
 // Development tasks
 
 gulp.task('html', function() {
 	return gulp.src('src/*.html')
-	.pipe(browserSync.reload({stream: true}));
+		.pipe(browserSync.reload({stream: true}));
 });
 
 gulp.task('php', function() {
@@ -30,9 +29,7 @@ gulp.task('css', function() {
 });
 
 gulp.task('js', function() {
-	return gulp.src('src/js/app.js')
-		.pipe(webpack(require('./webpack.config.js')))
-		.pipe(gulp.dest('src/js/'))
+	return gulp.src('src/js/*.js')
 		.pipe(browserSync.reload({stream: true}));
 });
 
@@ -60,7 +57,7 @@ gulp.task('watch', function() {
 	gulp.watch('src/*.html', gulp.parallel('html'));
 	gulp.watch('src/**/*.php', gulp.parallel('php'));
 	gulp.watch('src/scss/**/*.scss', gulp.parallel('css'));
-	gulp.watch(["src/js/**/*.js", "!src/js/main.js"], gulp.parallel('js'));
+	gulp.watch('src/js/*.js', gulp.parallel('js'));
 	gulp.watch('src/images/**/*', gulp.parallel('img'));
 });
 
@@ -78,7 +75,7 @@ gulp.task('export', async function() {
 		}))
 		.pipe(gulp.dest('dist/css'));
 
-	const BuildJs = gulp.src('src/js/main.js')
+	const BuildJs = gulp.src('src/js/*.js')
 		.pipe(uglify())
 		.pipe(gulp.dest('dist/js'));
 		
