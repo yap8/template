@@ -11,7 +11,7 @@ const del = require('del');
 
 // Development tasks
 gulp.task('html', function() {
-	return gulp.src('src/.html')
+	return gulp.src('src/*.html')
 	.pipe(browserSync.reload({stream: true}));
 });
 
