@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "basic template",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "deploy": "gh-pages -d dist"
   },
   "author": "Arseny Nebozhenko",
+  "homepage": "https://arsenyNebozhenko.io/PROJECTNAME",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.7.2",
@@ -18,5 +19,8 @@
     "gulp-cssnano": "^2.1.3",
     "gulp-sass": "^4.0.2",
     "gulp-uglify": "^3.0.2"
+  },
+  "dependencies": {
+    "gh-pages": "^2.1.1"
   }
 }

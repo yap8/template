@@ -104,4 +104,4 @@ gulp.task('build:fonts', function() {
 gulp.task('build', gulp.parallel('clean', gulp.series('build:html', 'build:php', 'build:js', 'build:css', 'build:img', 'build:fonts')));
 
 // Default
-gulp.task('default', gulp.parallel('dev'));
+gulp.task('default', gulp.series('dev'));
