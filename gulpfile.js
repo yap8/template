@@ -2,10 +2,11 @@ const domainName = '';
 
 const gulp = require('gulp');
 const sass = require('gulp-sass');
+const postcss = require('gulp-postcss');
+const autoprefixer = require('autoprefixer');
+const cssnano = require('cssnano');
 const browserSync = require('browser-sync');
 const uglify = require('gulp-uglify');
-const autoprefixer = require('gulp-autoprefixer');
-const cssnano = require('gulp-cssnano');
 const babel = require('gulp-babel');
 const del = require('del');
 
@@ -23,7 +24,6 @@ gulp.task('php', function() {
 gulp.task('css', function() {
 	return gulp.src('src/scss/**/*.scss')
 		.pipe(sass())
-		.pipe(autoprefixer({overRideBrowsers: ['last 10 versions']}))
 		.pipe(gulp.dest('src/css'))
 		.pipe(browserSync.reload({stream: true}));
 });
@@ -84,12 +84,15 @@ gulp.task('build:js', function() {
 });
 
 gulp.task('build:css', function() {
+	const plugins = [
+		autoprefixer(),
+		cssnano()
+	];
 	return gulp.src('src/css/**/*.css')
-		.pipe(cssnano({
-			discardComments: {removeAll: true}
-		}))
+		.pipe(postcss(plugins))
 		.pipe(gulp.dest('dist/css'));
 });
+
 
 gulp.task('build:img', function() {
 	return gulp.src('src/images/**/*.*')
