@@ -11,6 +11,7 @@ const gulp = require('gulp'),
 			uglify = require('gulp-uglify'),
 			concat = require('gulp-concat'),
 			babel = require('gulp-babel'),
+			tinypng = require('gulp-tinypng-unlimited'),
 			del = require('del')
 
 // Functions
@@ -96,11 +97,12 @@ const buildCss = () => {
 }
 
 const buildImg = () =>
-	gulp.src('src/img/**/*.*')
+	gulp.src('src/img/**/*')
+		.pipe(tinypng())
 		.pipe(gulp.dest('dist/img'))
 
 const buildFonts = () =>
-	gulp.src('src/fonts/**/*.*')
+	gulp.src('src/fonts/**/*')
 		.pipe(gulp.dest('dist/fonts'))
 
 // Bind functions to tasks
