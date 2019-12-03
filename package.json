@@ -3,26 +3,27 @@
   "version": "1.0.0",
   "description": "basic template",
   "scripts": {
-		"start": "gulp",
-		"build": "build",
+    "start": "gulp",
+    "build": "gulp build",
     "deploy": "gh-pages -d dist"
   },
   "author": "Arseny Nebozhenko",
   "homepage": "https://arsenyNebozhenko.io/template",
-  "license": "ISC",
+	"license": "ISC",
   "devDependencies": {
-    "@babel/core": "^7.7.2",
+		"@babel/core": "^7.7.2",
     "@babel/preset-env": "^7.7.1",
     "autoprefixer": "^9.7.1",
     "browser-sync": "^2.26.5",
     "cssnano": "^4.1.10",
     "del": "^5.0.0",
+    "gh-pages": "^2.1.1",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
+    "gulp-concat": "^2.6.1",
     "gulp-postcss": "^8.0.0",
     "gulp-sass": "^4.0.2",
-    "gulp-uglify": "^3.0.2",
-    "gh-pages": "^2.1.1"
+    "gulp-uglify": "^3.0.2"
   },
   "dependencies": {}
 }
