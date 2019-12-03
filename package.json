@@ -19,9 +19,8 @@
     "gulp-babel": "^8.0.0",
     "gulp-postcss": "^8.0.0",
     "gulp-sass": "^4.0.2",
-    "gulp-uglify": "^3.0.2"
-  },
-  "dependencies": {
+    "gulp-uglify": "^3.0.2",
     "gh-pages": "^2.1.1"
-  }
+  },
+  "dependencies": {}
 }
