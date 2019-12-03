@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "description": "basic template",
   "scripts": {
+		"start": "gulp",
+		"build": "build",
     "deploy": "gh-pages -d dist"
   },
   "author": "Arseny Nebozhenko",
-  "homepage": "https://arsenyNebozhenko.io/PROJECTNAME",
+  "homepage": "https://arsenyNebozhenko.io/template",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.7.2",
