@@ -1,7 +1,20 @@
 // Domain name for backend development, leave empty if frontend only
 const domainName = ''
 
+// Requires
+const gulp = require('gulp'),
+			sass = require('gulp-sass'),
+			postcss = require('gulp-postcss'),
+			autoprefixer = require('autoprefixer'),
+			cssnano = require('cssnano'),
+			browserSync = require('browser-sync').create(),
+			uglify = require('gulp-uglify'),
+			concat = require('gulp-concat'),
+			babel = require('gulp-babel'),
+			del = require('del')
+
 // Functions
+// Misc
 const serve = () => {
 	if (domainName) {
 		browserSync.init({
@@ -16,84 +29,61 @@ const serve = () => {
 	}
 }
 
-// Requires
-const gulp = require('gulp'),
-			sass = require('gulp-sass'),
-			postcss = require('gulp-postcss'),
-			autoprefixer = require('autoprefixer'),
-			cssnano = require('cssnano'),
-			browserSync = require('browser-sync'),
-			uglify = require('gulp-uglify'),
-			concat = require('gulp-concat'),
-			babel = require('gulp-babel'),
-			del = require('del')
+const clean = () =>
+	del('dist')
 
-// Development tasks
-gulp.task('html', () =>
+// Development
+const html = () =>
 	gulp.src('src/**/*.html')
-		.pipe(browserSync.reload({stream: true}))
-)
 
-gulp.task('php', () =>
+const php = () =>
 	gulp.src('src/**/*.php')
-		.pipe(browserSync.reload({stream: true}))
-)
 
-gulp.task('css', () =>
+const css = () =>
 	gulp.src('src/scss/*.scss')
 		.pipe(sass())
 		.pipe(gulp.dest('src/css'))
-		.pipe(browserSync.reload({stream: true}))
-)
+		.pipe(browserSync.stream())
 
-gulp.task('js', () =>
+const js = () =>
 	gulp.src(['src/js/**/*.js', '!src/js/script.js'])
 		.pipe(concat('script.js'))
 		.pipe(gulp.dest('src/js'))
-		.pipe(browserSync.reload({stream: true}))
-)
+		.pipe(browserSync.stream())
 
-gulp.task('img', () =>
+const img = () =>
 	gulp.src('src/images/**/*')
-		.pipe(browserSync.reload({stream: true}))
-)
+		.pipe(browserSync.stream())
 
-gulp.task('clean', async () =>
-	del.sync('dist')
-)
-
-gulp.task('watch', () => {
+const watch = () => {
 	serve()
-	gulp.watch('src/**/*.html', gulp.parallel('html'))
-	gulp.watch('src/**/*.php', gulp.parallel('php'))
-	gulp.watch('src/scss/**/*.scss', gulp.parallel('css'))
-	gulp.watch(['src/js/**/*.js', '!src/js/script.js'], gulp.parallel('js'))
-	gulp.watch('src/images/**/*', gulp.parallel('img'))
-})
-
-gulp.task('dev', gulp.parallel('html', 'php', 'css', 'js', 'img', 'watch'))
+	gulp.watch('src/**/*.html', html).on('change', browserSync.reload)
+	gulp.watch('src/**/*.php', php).on('change', browserSync.reload)
+	gulp.watch('src/scss/**/*.scss', css)
+	gulp.watch(['src/js/**/*.js', '!src/js/script.js'], js)
+	gulp.watch('src/images/**/*', img)
+}
 
 // Production tasks
-gulp.task('build:html', function() {
-	return gulp.src('src/**/*.html')
+const buildHtml = () =>
+	gulp.src('src/**/*.html')
 		.pipe(gulp.dest('dist'))
-})
 
-gulp.task('build:php', function() {
-	return gulp.src('src/**/*.php')
+const buildPhp = () =>
+	gulp.src('src/**/*.php')
 		.pipe(gulp.dest('dist'))
-})
 
-gulp.task('build:js', function() {
-	return gulp.src('src/js/script.js')
+const buildJs = () =>
+	gulp.src('src/js/script.js')
 		.pipe(babel({
 			presets: ['@babel/env']
 		}))
-		.pipe(uglify())
+		.pipe(uglify({
+			toplevel: true
+		}))
 		.pipe(gulp.dest('dist/js'))
-})
 
-gulp.task('build:css', () => {
+const buildCss = () => {
 	const plugins = [
 		autoprefixer({
 			cascase: false
@@ -103,19 +93,34 @@ gulp.task('build:css', () => {
 	return gulp.src('src/css/**/*.css')
 		.pipe(postcss(plugins))
 		.pipe(gulp.dest('dist/css'))
-})
+}
 
-gulp.task('build:img', function() {
-	return gulp.src('src/images/**/*.*')
+const buildImg = () =>
+	gulp.src('src/images/**/*.*')
 		.pipe(gulp.dest('dist/images'))
-})
 
-gulp.task('build:fonts', function() {
-	return gulp.src('src/fonts/**/*.*')
+const buildFonts = () =>
+	gulp.src('src/fonts/**/*.*')
 		.pipe(gulp.dest('dist/fonts'))
-})
 
-gulp.task('build', gulp.parallel('clean', gulp.series('build:html', 'build:php', 'build:js', 'build:css', 'build:img', 'build:fonts')))
+// Bind functions to tasks
+// Development
+gulp.task('html', html)
+gulp.task('php', php)
+gulp.task('css', css)
+gulp.task('js', js)
+gulp.task('img', img)
+gulp.task('clean', clean)
+gulp.task('watch', watch)
+// Production
+gulp.task('build:html', buildHtml)
+gulp.task('build:php', buildPhp)
+gulp.task('build:js', buildJs)
+gulp.task('build:css', buildCss)
+gulp.task('build:img', buildImg)
+gulp.task('build:fonts', buildFonts)
 
-// Default task
-gulp.task('default', gulp.series('dev'))
+// Combined tasks
+gulp.task('start', gulp.series(gulp.parallel('html', 'php', 'css', 'js', 'img'), 'watch'))
+gulp.task('build', gulp.series('clean', gulp.parallel('build:html', 'build:php', 'build:js', 'build:css', 'build:img', 'build:fonts')))
+gulp.task('default', gulp.series('start'))
