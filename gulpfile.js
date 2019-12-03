@@ -52,7 +52,7 @@ const js = () =>
 		.pipe(browserSync.stream())
 
 const img = () =>
-	gulp.src('src/images/**/*')
+	gulp.src('src/img/**/*')
 		.pipe(browserSync.stream())
 
 const watch = () => {
@@ -61,7 +61,7 @@ const watch = () => {
 	gulp.watch('src/**/*.php', php).on('change', browserSync.reload)
 	gulp.watch('src/scss/**/*.scss', css)
 	gulp.watch(['src/js/**/*.js', '!src/js/script.js'], js)
-	gulp.watch('src/images/**/*', img)
+	gulp.watch('src/img/**/*', img)
 }
 
 // Production tasks
@@ -96,8 +96,8 @@ const buildCss = () => {
 }
 
 const buildImg = () =>
-	gulp.src('src/images/**/*.*')
-		.pipe(gulp.dest('dist/images'))
+	gulp.src('src/img/**/*.*')
+		.pipe(gulp.dest('dist/img'))
 
 const buildFonts = () =>
 	gulp.src('src/fonts/**/*.*')
