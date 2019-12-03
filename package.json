@@ -23,7 +23,6 @@
     "gulp-concat": "^2.6.1",
     "gulp-postcss": "^8.0.0",
     "gulp-sass": "^4.0.2",
-    "gulp-tinypng": "^1.0.2",
     "gulp-tinypng-unlimited": "^1.0.3",
     "gulp-uglify": "^3.0.2"
   },
