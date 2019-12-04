@@ -46,6 +46,11 @@ const css = () =>
 		.pipe(gulp.dest('src/css'))
 		.pipe(browserSync.stream())
 
+const jsLib = () =>
+	gulp.src(['node_modules/jquery/dist/jquery.min.js'])
+		.pipe(concat('lib.js'))
+		.pipe(gulp.dest('src/js'))
+
 const js = () =>
 	gulp.src(['src/js/**/*.js', '!src/js/script.js'])
 		.pipe(concat('script.js'))
@@ -110,6 +115,7 @@ const buildFonts = () =>
 gulp.task('html', html)
 gulp.task('php', php)
 gulp.task('css', css)
+gulp.task('js:lib', jsLib)
 gulp.task('js', js)
 gulp.task('img', img)
 gulp.task('clean', clean)
@@ -123,6 +129,6 @@ gulp.task('build:img', buildImg)
 gulp.task('build:fonts', buildFonts)
 
 // Combined tasks
-gulp.task('start', gulp.series(gulp.parallel('html', 'php', 'css', 'js', 'img'), 'watch'))
+gulp.task('start', gulp.series(gulp.parallel('html', 'php', 'css', 'js:lib', 'js', 'img'), 'watch'))
 gulp.task('build', gulp.series('clean', gulp.parallel('build:html', 'build:php', 'build:js', 'build:css', 'build:img', 'build:fonts')))
 gulp.task('default', gulp.series('start'))
