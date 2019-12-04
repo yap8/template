@@ -1,8 +1,12 @@
 // Domain name for backend development, leave empty if frontend only
 const domainName = ''
 
+// Language/template engine that will be used, options: html, php, pug
+const lang = 'html'
+
 // Requires
 const gulp = require('gulp'),
+			pug = require('gulp-pug'),
 			sass = require('gulp-sass'),
 			postcss = require('gulp-postcss'),
 			autoprefixer = require('autoprefixer'),
@@ -33,12 +37,25 @@ const serve = () => {
 const clean = () =>
 	del('dist')
 
+const cleanPhp = () =>
+	del(['src/*.php', 'src/includes'])
+
+const cleanPug = () =>
+	del('src/pug')
+
 // Development
 const html = () =>
 	gulp.src('src/**/*.html')
 
 const php = () =>
 	gulp.src('src/**/*.php')
+
+const htmlPug = () =>
+	gulp.src('src/pug/*.pug')
+		.pipe(pug({
+			pretty: true
+		}))
+		.pipe(gulp.dest('src/'))
 
 const css = () =>
 	gulp.src('src/scss/*.scss')
@@ -63,8 +80,13 @@ const img = () =>
 
 const watch = () => {
 	serve()
-	gulp.watch('src/**/*.html', html).on('change', browserSync.reload)
-	gulp.watch('src/**/*.php', php).on('change', browserSync.reload)
+	if (lang === 'html') {
+		gulp.watch('src/**/*.html', html).on('change', browserSync.reload)
+	} else if (lang === 'php') {
+		gulp.watch('src/**/*.php', php).on('change', browserSync.reload)
+	} else if (lang === 'pug') {
+		gulp.watch('src/**/*.pug', htmlPug).on('change', browserSync.reload)
+	}
 	gulp.watch('src/scss/**/*.scss', css)
 	gulp.watch(['src/js/**/*.js', '!src/js/script.js'], js)
 	gulp.watch('src/img/**/*', img)
@@ -112,13 +134,17 @@ const buildFonts = () =>
 
 // Bind functions to tasks
 // Development
+gulp.task('clean', clean)
+gulp.task('clean:php', cleanPhp)
+gulp.task('clean:pug', cleanPug)
+
 gulp.task('html', html)
 gulp.task('php', php)
+gulp.task('html:pug', htmlPug)
 gulp.task('css', css)
 gulp.task('js:lib', jsLib)
 gulp.task('js', js)
 gulp.task('img', img)
-gulp.task('clean', clean)
 gulp.task('watch', watch)
 // Production
 gulp.task('build:html', buildHtml)
@@ -129,6 +155,13 @@ gulp.task('build:img', buildImg)
 gulp.task('build:fonts', buildFonts)
 
 // Combined tasks
-gulp.task('start', gulp.series(gulp.parallel('html', 'php', 'css', 'js', 'img'), 'watch'))
+if (lang === 'html') {
+	gulp.task('start', gulp.series('clean:php', 'clean:pug', gulp.parallel('html', 'css', 'js', 'img'), 'watch'))
+} else if (lang === 'php') {
+	gulp.task('start', gulp.series('clean:pug', gulp.parallel('php', 'css', 'js', 'img'), 'watch'))
+} else if (lang === 'pug') {
+	gulp.task('start', gulp.series('clean:php', gulp.parallel('html:pug', 'css', 'js', 'img'), 'watch'))
+}
+
 gulp.task('build', gulp.series('clean', gulp.parallel('build:html', 'build:php', 'build:js', 'build:css', 'build:img', 'build:fonts')))
 gulp.task('default', gulp.series('start'))
