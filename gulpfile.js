@@ -47,7 +47,7 @@ const css = () =>
 		.pipe(browserSync.stream())
 
 const jsLib = () =>
-	gulp.src(['node_modules/jquery/dist/jquery.min.js'])
+	gulp.src(['']) // Javascript library connection
 		.pipe(concat('lib.js'))
 		.pipe(gulp.dest('src/js'))
 
@@ -129,6 +129,6 @@ gulp.task('build:img', buildImg)
 gulp.task('build:fonts', buildFonts)
 
 // Combined tasks
-gulp.task('start', gulp.series(gulp.parallel('html', 'php', 'css', 'js:lib', 'js', 'img'), 'watch'))
+gulp.task('start', gulp.series(gulp.parallel('html', 'php', 'css', 'js', 'img'), 'watch'))
 gulp.task('build', gulp.series('clean', gulp.parallel('build:html', 'build:php', 'build:js', 'build:css', 'build:img', 'build:fonts')))
 gulp.task('default', gulp.series('start'))
