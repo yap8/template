@@ -10,6 +10,7 @@ const tinypng = require('gulp-tinypng-unlimited')
 const del = require('del')
 const posthtml = require('gulp-posthtml')
 const include = require('posthtml-include')
+const ttf2woff2 = require('gulp-ttf2woff2')
 
 const serve = () => {
   browserSync.init({
@@ -72,8 +73,9 @@ const ico = () => {
 }
 
 const fonts = () => {
-	return gulp.src('src/fonts/**/*')
-		.pipe(gulp.dest('dist'))
+  return gulp.src('src/fonts/**/*')
+    .pipe(ttf2woff2())
+		.pipe(gulp.dest('dist/fonts'))
 }
 
 const watch = () => {
