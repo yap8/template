@@ -61,7 +61,7 @@ const js = () => {
   }
   
 const img = () => {
-  return gulp.src(['src/img/**/*!svg', 'src/images/**/*!svg'])
+  return gulp.src(['src/img/**/*', 'src/images/**/*'])
     .pipe(tinypng())
     .pipe(gulp.dest('dist'))
 		.pipe(browserSync.stream())
