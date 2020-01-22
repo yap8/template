@@ -24,7 +24,6 @@ const clean = () => {
 	return del('dist')
 }
 
-// Development
 const html = () => {
   return gulp.src('src/**/*.html')
     .pipe(posthtml([
@@ -88,7 +87,6 @@ const watch = () => {
 	gulp.watch('src/fonts/**/*', ico)
 }
 
-// Development
 gulp.task('clean', clean)
 gulp.task('html', html)
 gulp.task('css', css)
