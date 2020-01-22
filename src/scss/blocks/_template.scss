@@ -1,0 +1,29 @@
+.template {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  &__animation {
+    margin-bottom: 64px;
+    svg {
+      height: 256px;
+      width: 256px;
+      animation: spin 3s linear infinite;
+    }
+  }
+  &__text {
+    
+  }
+  &__text-title {
+    font-size: 64px;
+    font-family: Roboto, sans-serif;
+  }
+}
+
+@keyframes spin {
+  100% {
+    transform:rotate(360deg); 
+  }
+}
