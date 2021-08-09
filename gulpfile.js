@@ -1,5 +1,5 @@
-const gulp = require('gulp')
-const sass = require('gulp-sass')
+const { src, dest, watch, series, parallel } = require('gulp')
+const sass = require('gulp-sass')(require('sass'))
 const postcss = require('gulp-postcss')
 const autoprefixer = require('autoprefixer')
 const cssnano = require('cssnano')
@@ -21,15 +21,15 @@ const serve = () => {
 }
 
 const clean = () => {
-	return del('dist')
+  return del('dist')
 }
 
 const html = () => {
-  return gulp.src('src/**/*.html')
+  return src('src/**/*.html')
     .pipe(posthtml([
       include()
     ]))
-    .pipe(gulp.dest('dist'))
+    .pipe(dest('dist'))
     .pipe(browserSync.stream())
 }
 
@@ -40,60 +40,60 @@ const css = () => {
     }),
     cssnano()
   ]
-	return gulp.src('src/scss/*.scss')
+  return src('src/scss/*.scss')
     .pipe(sass())
     .pipe(postcss(plugins))
-    .pipe(gulp.dest('dist/css'))
+    .pipe(dest('dist/css'))
     .pipe(browserSync.stream())
-  }
+}
   
 const js = () => {
-	return gulp.src('src/**/*.js')
+  return src('src/**/*.js')
     .pipe(babel({
       presets: ['@babel/env']
     }))
     .pipe(uglify({
       toplevel: true
     }))
-    .pipe(gulp.dest('dist'))
+    .pipe(dest('dist'))
     .pipe(browserSync.stream())
-  }
+}
   
 const img = () => {
-  return gulp.src(['src/img/**/*', 'src/images/**/*'])
+  return src(['src/img/**/*', 'src/images/**/*'])
     .pipe(tinypng())
-    .pipe(gulp.dest('dist'))
-		.pipe(browserSync.stream())
+    .pipe(dest('dist'))
+    .pipe(browserSync.stream())
 }
 
 const ico = () => {
-  return gulp.src('src/*.ico')
-    .pipe(gulp.dest('dist'))
+  return src('src/*.ico')
+    .pipe(dest('dist'))
 }
 
 const fonts = () => {
-  return gulp.src('src/fonts/**/*')
+  return src('src/fonts/**/*')
     .pipe(ttf2woff2())
-		.pipe(gulp.dest('dist/fonts'))
+    .pipe(dest('dist/fonts'))
 }
 
-const watch = () => {
-	serve()
-	gulp.watch('src/**/*.html', html).on('change', browserSync.reload)
-	gulp.watch(['src/scss/**/*.scss', 'src/sass/**/*.sass'], css)
-	gulp.watch('src/**/*.js', js)
-	gulp.watch(['src/img/**/*', 'src/images/**/*'], img)
-	gulp.watch('src/*.ico', ico)
-	gulp.watch('src/fonts/**/*', ico)
+const watchTask = () => {
+  serve()
+  watch('src/**/*.html', html).on('change', browserSync.reload)
+  watch(['src/scss/**/*.scss', 'src/sass/**/*.sass'], css)
+  watch('src/**/*.js', js)
+  watch(['src/img/**/*', 'src/images/**/*'], img)
+  watch('src/*.ico', ico)
+  watch('src/fonts/**/*', ico)
 }
 
-gulp.task('clean', clean)
-gulp.task('html', html)
-gulp.task('css', css)
-gulp.task('js', js)
-gulp.task('img', img)
-gulp.task('ico', ico)
-gulp.task('fonts', fonts)
-gulp.task('watch', watch)
+exports.clean = clean
+exports.html = html
+exports.css = css
+exports.js = js
+exports.img = img
+exports.ico = ico
+exports.fonts = fonts
+exports.watch = watch
 
-gulp.task('default', gulp.series('clean', gulp.parallel('html', 'css', 'js', 'img', 'ico', 'fonts'), 'watch'))
+exports.default = series(clean, parallel(html, css, js, img, ico, fonts), watchTask)
