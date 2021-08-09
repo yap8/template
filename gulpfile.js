@@ -96,4 +96,5 @@ exports.ico = ico
 exports.fonts = fonts
 exports.watch = watch
 
+exports.build = series(clean, parallel(html, css, js, img, ico, fonts))
 exports.default = series(clean, parallel(html, css, js, img, ico, fonts), watchTask)
