@@ -60,9 +60,9 @@ const js = () => {
 }
   
 const img = () => {
-  return src(['src/img/**/*', 'src/images/**/*'])
+  return src('src/img/**/*')
     .pipe(tinypng())
-    .pipe(dest('dist'))
+    .pipe(dest('dist/img'))
     .pipe(browserSync.stream())
 }
 
