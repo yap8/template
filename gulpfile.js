@@ -27,7 +27,9 @@ const clean = () => {
 const html = () => {
   return src('src/**/*.html')
     .pipe(posthtml([
-      include()
+      include({
+        root: './src'
+      })
     ]))
     .pipe(dest('dist'))
     .pipe(browserSync.stream())
