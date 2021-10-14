@@ -1,1 +1,6 @@
-# Template for frontend
+# Frontend template
+## Usage
+```sh
+npm i
+npm start
+```
